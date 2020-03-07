@@ -1,7 +1,7 @@
-import sprites, { blockSize } from "./sprites";
+import sprites from "./sprites";
 import Agent from "./agent";
 import { epsilonGreedy } from "./policies";
-import { RIGHT, LEFT, UP, BOTTOM } from "./const";
+import { RIGHT, LEFT, UP, BOTTOM, blockSize } from "./const";
 
 const height = 6;
 const width = 4;
@@ -93,10 +93,6 @@ export class Map {
             blockSize * (this.h + 1)
         );
 
-        // for (const agent of this.agents) {
-        //     agent.draw(ctx);
-        // }
-
         this.t++;
         if (this.t % 4 != 0) return;
 
@@ -105,26 +101,31 @@ export class Map {
 
         for (const agent of this.agents) {
             const action = agent.chooseAction();
+            if (this.map[agent.x][agent.y] != undefined) {
+                agent.newRun();
+            }
+
+            let newX = agent.x;
+            let newY = agent.y;
             switch (action) {
                 case UP:
-                    if (agent.y > 0) agent.newPosition(agent.x, agent.y - 1);
-                    else agent.newPosition(agent.x, agent.y);
+                    if (agent.y > 0) newY--;
                     break;
                 case RIGHT:
-                    if (agent.x < this.w - 1)
-                        agent.newPosition(agent.x + 1, agent.y);
-                    else agent.newPosition(agent.x, agent.y);
+                    if (agent.x < this.w - 1) newX++;
                     break;
                 case BOTTOM:
-                    if (agent.y < this.h - 1)
-                        agent.newPosition(agent.x, agent.y + 1);
-                    else agent.newPosition(agent.x, agent.y);
+                    if (agent.y < this.h - 1) newY++;
                     break;
                 case LEFT:
-                    if (agent.x > 0) agent.newPosition(agent.x - 1, agent.y);
-                    else agent.newPosition(agent.x, agent.y);
+                    if (agent.x > 0) newX--;
                     break;
             }
+            const elt = this.map[newX][newY];
+            if (elt != undefined) {
+                agent.getReward(elt.reward);
+            } else agent.getReward(0);
+            agent.newPosition(newX, newY);
         }
     }
 
@@ -185,7 +186,9 @@ export function initSarsa() {
 
     map.addAgent(new Agent(height, width, epsilonGreedy(0.2)));
     map.addElement(new Reward(), 2, 2);
+    map.addElement(new Reward(), 0, 4);
     map.addElement(new Monster(), 3, 3);
+    map.addElement(new Monster(), 3, 0);
 
     return map;
 }

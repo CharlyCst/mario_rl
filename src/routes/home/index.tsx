@@ -2,13 +2,16 @@ import { FunctionalComponent, h } from "preact";
 import * as style from "./style.css";
 
 import { initSarsa } from "../../sarsa/sarsa";
-import { Canvas } from "../../sarsa/canvas";
+import { Arena } from "../../sarsa/arena";
+import { HeatMap } from "../../sarsa/heatmap";
 
 const Home: FunctionalComponent = () => {
     const map = initSarsa();
+    const agent = map.agents[0];
     return (
         <div class={style.home}>
-            <Canvas map={map} />
+            <Arena map={map} />
+            <HeatMap map={map} agent={agent} />
         </div>
     );
 };

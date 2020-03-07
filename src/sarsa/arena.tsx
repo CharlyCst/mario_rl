@@ -1,19 +1,15 @@
-import { FunctionalComponent, h } from "preact";
+import { h } from "preact";
 import { useRef, useEffect } from "preact/hooks";
 import { Map } from "./sarsa";
-import { blockSize } from "./sprites";
+import { blockSize } from "./const";
+import { sleep } from "./utils";
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-export const Canvas = (props: { map: Map }) => {
+export const Arena = (props: { map: Map }) => {
     const canvas = useRef<null | HTMLCanvasElement>(null);
 
     const draw = async () => {
-        if (canvas.current == null) {
-            return;
-        }
+        if (canvas.current == null) return;
+
         const ctx = canvas.current.getContext("2d");
         if (ctx == null) return;
 

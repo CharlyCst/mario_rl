@@ -1,5 +1,5 @@
-import sprites, { blockSize } from "./sprites";
-import { RIGHT, LEFT, UP, BOTTOM } from "./const";
+import sprites from "./sprites";
+import { RIGHT, LEFT, UP, BOTTOM, blockSize } from "./const";
 
 const nbActions = 4;
 
@@ -7,6 +7,8 @@ export default class Agent {
     x: number;
     y: number;
     Q: number[][][];
+    gamma: number;
+    lastReward?: number;
     lastAction: number;
     lastX: number;
     lastY: number;
@@ -17,6 +19,7 @@ export default class Agent {
         width: number,
         policy: (Q: number[]) => number
     ) {
+        this.gamma = 0.8;
         this.policy = policy;
         this.lastAction = BOTTOM;
         this.x = this.y = this.lastX = this.lastY = 0;
@@ -31,10 +34,28 @@ export default class Agent {
         }
     }
 
+    newRun() {
+        this.lastX = this.x = 0;
+        this.lastY = this.y = 0;
+        this.lastReward = undefined;
+        this.lastAction = BOTTOM;
+    }
+
     chooseAction() {
         const a = this.policy(this.Q[this.x][this.y]);
+        if (this.lastReward != undefined) {
+            const deltaQ =
+                this.lastReward +
+                this.gamma * this.Q[this.x][this.y][a] -
+                this.Q[this.lastX][this.lastY][this.lastAction];
+            this.Q[this.lastX][this.lastY][this.lastAction] += deltaQ;
+        }
         this.lastAction = a;
         return a;
+    }
+
+    getReward(r: number) {
+        this.lastReward = r;
     }
 
     newPosition(x: number, y: number) {
@@ -91,7 +112,9 @@ export default class Agent {
                         return sprites.marioLeft2;
                 }
             default:
-                console.log("Failed to get sprite for agent");
+                console.log(
+                    "Failed to get sprite for agent: " + this.lastAction
+                );
                 return sprites.marioFace;
         }
     }

@@ -67,4 +67,3 @@ sprites.block.src = "assets/block.png";
 sprites.blockShadow.src = "assets/block_shadow.png";
 
 export default sprites;
-export const blockSize = 24;
