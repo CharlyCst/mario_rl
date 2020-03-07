@@ -16,7 +16,7 @@ export const greedy = (Q: number[]) => {
 
 export const epsilonGreedy = (epsilon: number) => (Q: number[]) => {
     if (Math.random() < epsilon) {
-        return Math.ceil(Math.random() * Q.length);
+        return Math.floor(Math.random() * Q.length);
     }
     return greedy(Q);
 };

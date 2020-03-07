@@ -1,14 +1,10 @@
 import sprites, { blockSize } from "./sprites";
 import Agent from "./agent";
 import { epsilonGreedy } from "./policies";
+import { RIGHT, LEFT, UP, BOTTOM } from "./const";
 
 const height = 6;
 const width = 4;
-
-const UP = 0;
-const RIGHT = 1;
-const BOTTOM = 2;
-const LEFT = 3;
 
 export class Map {
     map: (Element | undefined)[][];
@@ -47,8 +43,8 @@ export class Map {
         for (let i = 0; i < this.w; i++) {
             ctx.drawImage(sprites.borderTop, blockSize * i, -blockSize);
         }
-        for (let i = 0; i < this.w; i++) {
-            for (let j = 0; j < this.h; j++) {
+        for (let j = 0; j < this.h; j++) {
+            for (let i = 0; i < this.w; i++) {
                 ctx.drawImage(sprites.ground, blockSize * i, blockSize * j);
             }
         }
@@ -60,9 +56,9 @@ export class Map {
                 blockSize * j
             );
         }
-        for (let i = 0; i < this.w; i++) {
+        for (let j = 0; j < this.h; j++) {
             // Draw ground, elts and agents
-            for (let j = 0; j < this.h; j++) {
+            for (let i = 0; i < this.w; i++) {
                 const elt = this.map[i][j];
                 if (elt != undefined) elt.draw(ctx, i, j, this.t);
                 this.drawAgent(ctx, i, j);
@@ -135,7 +131,7 @@ export class Map {
     drawAgent(ctx: CanvasRenderingContext2D, x: number, y: number) {
         for (const agent of this.agents) {
             if (agent.x == x && agent.y == y) {
-                agent.draw(ctx);
+                agent.draw(ctx, this.t);
             }
         }
     }

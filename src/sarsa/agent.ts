@@ -1,5 +1,5 @@
 import sprites, { blockSize } from "./sprites";
-import {} from "./sarsa";
+import { RIGHT, LEFT, UP, BOTTOM } from "./const";
 
 const nbActions = 4;
 
@@ -7,6 +7,9 @@ export default class Agent {
     x: number;
     y: number;
     Q: number[][][];
+    lastAction: number;
+    lastX: number;
+    lastY: number;
     policy: (Q: number[]) => number;
 
     constructor(
@@ -15,8 +18,8 @@ export default class Agent {
         policy: (Q: number[]) => number
     ) {
         this.policy = policy;
-        this.x = 0;
-        this.y = 0;
+        this.lastAction = BOTTOM;
+        this.x = this.y = this.lastX = this.lastY = 0;
 
         this.Q = [];
         for (let i = 0; i < width; i++) {
@@ -29,19 +32,78 @@ export default class Agent {
     }
 
     chooseAction() {
-        return this.policy(this.Q[this.x][this.y]);
+        const a = this.policy(this.Q[this.x][this.y]);
+        this.lastAction = a;
+        return a;
     }
 
     newPosition(x: number, y: number) {
+        this.lastX = this.x;
+        this.lastY = this.y;
         this.x = x;
         this.y = y;
     }
 
-    draw(ctx: CanvasRenderingContext2D) {
+    getSprite(t: number) {
+        switch (this.lastAction) {
+            case UP:
+                switch (t % 4) {
+                    case 0:
+                        return sprites.marioBack;
+                    case 1:
+                        return sprites.marioBack1;
+                    case 2:
+                        return sprites.marioBack;
+                    case 3:
+                        return sprites.marioBack2;
+                }
+            case RIGHT:
+                switch (t % 4) {
+                    case 0:
+                        return sprites.marioRight;
+                    case 1:
+                        return sprites.marioRight1;
+                    case 2:
+                        return sprites.marioRight;
+                    case 3:
+                        return sprites.marioRight2;
+                }
+            case BOTTOM:
+                switch (t % 4) {
+                    case 0:
+                        return sprites.marioFace;
+                    case 1:
+                        return sprites.marioFace1;
+                    case 2:
+                        return sprites.marioFace;
+                    case 3:
+                        return sprites.marioFace2;
+                }
+            case LEFT:
+                switch (t % 4) {
+                    case 0:
+                        return sprites.marioLeft;
+                    case 1:
+                        return sprites.marioLeft1;
+                    case 2:
+                        return sprites.marioLeft;
+                    case 3:
+                        return sprites.marioLeft2;
+                }
+            default:
+                console.log("Failed to get sprite for agent");
+                return sprites.marioFace;
+        }
+    }
+
+    draw(ctx: CanvasRenderingContext2D, t: number) {
+        const dx = ((this.x - this.lastX) * ((t % 4) + 1)) / 4;
+        const dy = ((this.y - this.lastY) * ((t % 4) + 1)) / 4;
+
         ctx.drawImage(
-            sprites.marioFace,
-            blockSize * this.x,
-            blockSize * this.y - blockSize / 2
+            this.getSprite(t),
+            blockSize * (this.lastX + dx),
+            blockSize * (this.lastY + dy) - blockSize / 2
         );
     }
 }
