@@ -4,14 +4,15 @@ import { RIGHT, LEFT, UP, BOTTOM, blockSize } from "./const";
 const nbActions = 4;
 
 export default class Agent {
+    Q: number[][][];
+    learningRate = 0.3;
+    gamma = 0.8;
     x: number;
     y: number;
-    Q: number[][][];
-    gamma: number;
-    lastReward?: number;
-    lastAction: number;
     lastX: number;
     lastY: number;
+    lastReward?: number;
+    lastAction: number;
     policy: (Q: number[]) => number;
 
     constructor(
@@ -19,7 +20,6 @@ export default class Agent {
         width: number,
         policy: (Q: number[]) => number
     ) {
-        this.gamma = 0.8;
         this.policy = policy;
         this.lastAction = BOTTOM;
         this.x = this.y = this.lastX = this.lastY = 0;
@@ -48,7 +48,8 @@ export default class Agent {
                 this.lastReward +
                 this.gamma * this.Q[this.x][this.y][a] -
                 this.Q[this.lastX][this.lastY][this.lastAction];
-            this.Q[this.lastX][this.lastY][this.lastAction] += deltaQ;
+            this.Q[this.lastX][this.lastY][this.lastAction] +=
+                this.learningRate * deltaQ;
         }
         this.lastAction = a;
         return a;
