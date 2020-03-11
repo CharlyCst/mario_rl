@@ -1,9 +1,9 @@
 import { h } from "preact";
 import { useRef, useEffect } from "preact/hooks";
-import { blockSize, UP, BOTTOM, RIGHT, LEFT } from "./const";
-import { sleep } from "./utils";
-import { Map } from "./sarsa";
-import Agent from "./agent";
+import { blockSize, UP, BOTTOM, RIGHT, LEFT } from "./core/const";
+import { sleep } from "./core/utils";
+import { Map } from "./core/sarsa";
+import Agent from "./core/agent";
 
 const color1 = [255, 0, 255];
 const color2 = [0, 255, 255];

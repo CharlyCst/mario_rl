@@ -14,6 +14,9 @@ export class Map {
     t: number;
     turn: number;
 
+    run = false;
+    initialRendering = true;
+
     constructor(height: number, width: number) {
         this.turn = 0;
         this.t = 0;
@@ -38,6 +41,10 @@ export class Map {
     addReward(value: number, x: number, y: number) {}
 
     draw(ctx: CanvasRenderingContext2D) {
+        if (!this.run && !this.initialRendering) return;
+        this.initialRendering = false;
+        console.log("Render");
+
         ctx.drawImage(sprites.borderLeftUp, -blockSize, -blockSize);
         ctx.drawImage(sprites.borderRightUp, blockSize * this.w, -blockSize);
         for (let i = 0; i < this.w; i++) {

@@ -1,5 +1,6 @@
 import { FunctionalComponent, h } from "preact";
 import { Route, Router, RouterOnChangeArgs } from "preact-router";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import Home from "../routes/home";
 import Profile from "../routes/profile";
@@ -11,6 +12,17 @@ if ((module as any).hot) {
     require("preact/debug");
 }
 
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: "#7f7fff"
+        },
+        secondary: {
+            main: "#ad52ff"
+        }
+    }
+});
+
 const App: FunctionalComponent = () => {
     let currentUrl: string;
     const handleRoute = (e: RouterOnChangeArgs) => {
@@ -19,12 +31,13 @@ const App: FunctionalComponent = () => {
 
     return (
         <div id="app">
-            <Header />
-            <Router onChange={handleRoute}>
-                <Route path="/" component={Home} />
-                <Route path="/profile/" component={Profile} user="me" />
-                <Route path="/profile/:user" component={Profile} />
-            </Router>
+            <ThemeProvider theme={theme}>
+                <Router onChange={handleRoute}>
+                    <Route path="/" component={Home} />
+                    <Route path="/profile/" component={Profile} user="me" />
+                    <Route path="/profile/:user" component={Profile} />
+                </Router>
+            </ThemeProvider>
         </div>
     );
 };

@@ -1,8 +1,8 @@
 import { h } from "preact";
 import { useRef, useEffect } from "preact/hooks";
-import { Map } from "./sarsa";
-import { blockSize } from "./const";
-import { sleep } from "./utils";
+import { Map } from "./core/sarsa";
+import { blockSize } from "./core/const";
+import { sleep } from "./core/utils";
 
 export const Arena = (props: { map: Map }) => {
     const canvas = useRef<null | HTMLCanvasElement>(null);
