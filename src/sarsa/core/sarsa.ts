@@ -43,7 +43,7 @@ export class Map {
     draw(ctx: CanvasRenderingContext2D) {
         if (!this.run && !this.initialRendering) return;
         this.initialRendering = false;
-        console.log("Render");
+        // console.log("Render");
 
         ctx.drawImage(sprites.borderLeftUp, -blockSize, -blockSize);
         ctx.drawImage(sprites.borderRightUp, blockSize * this.w, -blockSize);
@@ -191,7 +191,7 @@ class Monster extends Element {
 export function initSarsa() {
     const map = new Map(height, width);
 
-    map.addAgent(new Agent(height, width, epsilonGreedy(0.2)));
+    map.addAgent(new Agent(height, width));
     map.addElement(new Reward(), 2, 2);
     map.addElement(new Reward(), 0, 4);
     map.addElement(new Monster(), 3, 3);

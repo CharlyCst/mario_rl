@@ -8,7 +8,9 @@ import {
     Activate,
     LearningRatePicker,
     DiscountFactorPicker,
-    StepsPicker
+    StepsPicker,
+    Policy,
+    LearningStrategy
 } from "../../sarsa/control";
 
 const Home: FunctionalComponent = () => {
@@ -20,6 +22,8 @@ const Home: FunctionalComponent = () => {
             <LearningRatePicker agent={agent} />
             <DiscountFactorPicker agent={agent} />
             <StepsPicker agent={agent} />
+            <Policy agent={agent} />
+            <LearningStrategy agent={agent} />
             <Arena map={map} />
             <HeatMap map={map} agent={agent} />
         </div>

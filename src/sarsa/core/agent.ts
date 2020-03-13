@@ -1,5 +1,6 @@
 import sprites from "./sprites";
 import { RIGHT, LEFT, UP, BOTTOM, blockSize } from "./const";
+import { epsilonGreedy, greedy, softmax } from "./policies";
 
 const nbActions = 4;
 
@@ -7,6 +8,9 @@ export default class Agent {
     Q: number[][][];
     learningRate = 0.3;
     gamma = 0.8;
+    epsilon = 0.2;
+    softmax = false;
+    QLearning = false;
     nSteps = 1;
     x: number;
     y: number;
@@ -14,14 +18,9 @@ export default class Agent {
     lastY: number[];
     lastRewards: number[] = [];
     lastActions: number[];
-    policy: (Q: number[]) => number;
+    lastGreedyAction: number;
 
-    constructor(
-        height: number,
-        width: number,
-        policy: (Q: number[]) => number
-    ) {
-        this.policy = policy;
+    constructor(height: number, width: number) {
         this.lastActions = [BOTTOM];
         this.x = this.y = 0;
         this.lastX = [0];
@@ -52,7 +51,13 @@ export default class Agent {
     }
 
     chooseAction() {
-        const a = this.policy(this.Q[this.x][this.y]);
+        const Q = this.Q[this.x][this.y];
+        let a: number;
+        if (this.softmax) {
+            a = softmax(Q);
+        } else a = epsilonGreedy(this.epsilon, Q);
+        this.lastGreedyAction = greedy(Q);
+
         this.reinforce(this.nSteps, a);
         this.lastActions.unshift(a);
         return a;
@@ -70,7 +75,13 @@ export default class Agent {
             deltaQ += this.lastRewards[i] * discount;
             discount *= this.gamma;
         }
-        deltaQ += discount * this.Q[this.x][this.y][a];
+
+        if (this.QLearning) {
+            deltaQ += discount * this.Q[this.x][this.y][this.lastGreedyAction];
+        } else {
+            deltaQ += discount * this.Q[this.x][this.y][a];
+        }
+
         this.Q[this.lastX[n - 1]][this.lastY[n - 1]][this.lastActions[n - 1]] +=
             this.learningRate * deltaQ;
 

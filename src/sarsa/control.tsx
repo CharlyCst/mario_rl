@@ -5,6 +5,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import Slider from "@material-ui/core/Slider";
 import Tooltip from "@material-ui/core/Tooltip";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import Typography from "@material-ui/core/Typography";
 import { Map } from "./core/sarsa";
 import Agent from "./core/agent";
@@ -51,7 +53,7 @@ export const DiscountFactorPicker = (props: { agent: Agent }) => {
             <Slider
                 min={0}
                 max={1}
-                step={0.01}
+                step={0.02}
                 ValueLabelComponent={ValueLabelComponent}
                 value={discountFactor}
                 onChange={handleChange}
@@ -76,7 +78,7 @@ export const LearningRatePicker = (props: { agent: Agent }) => {
             <Slider
                 min={0}
                 max={1}
-                step={0.01}
+                step={0.02}
                 ValueLabelComponent={ValueLabelComponent}
                 value={learningRate}
                 onChange={handleChange}
@@ -107,6 +109,86 @@ export const StepsPicker = (props: { agent: Agent }) => {
                 value={steps}
                 onChange={handleChange}
                 className={classes.slider}
+            />
+        </div>
+    );
+};
+
+export const LearningStrategy = (props: { agent: Agent }) => {
+    const [QLearning, setQLearning] = useState(props.agent.QLearning);
+
+    const handleChange = () => {
+        props.agent.QLearning = !QLearning;
+        setQLearning(!QLearning);
+    };
+
+    return (
+        <div>
+            <RadioGroup
+                aria-label="Policy"
+                name="Policy"
+                value={QLearning}
+                onChange={handleChange}
+            >
+                <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="Sarsa"
+                />
+                <FormControlLabel
+                    value={true}
+                    control={<Radio />}
+                    label="Q-learning"
+                />
+            </RadioGroup>
+        </div>
+    );
+};
+
+export const Policy = (props: { agent: Agent }) => {
+    const [softmax, setSoftmax] = useState(props.agent.softmax);
+    const [epsilon, setEpsilon] = useState(props.agent.epsilon);
+    const classes = useStyles();
+
+    const handleChange = () => {
+        props.agent.softmax = !softmax;
+        setSoftmax(!softmax);
+    };
+
+    const handleEpsilonChange = (event: any, newValue: number) => {
+        props.agent.epsilon = newValue;
+        setEpsilon(newValue);
+    };
+
+    return (
+        <div>
+            <RadioGroup
+                aria-label="Policy"
+                name="Policy"
+                value={softmax}
+                onChange={handleChange}
+            >
+                <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="ε-greedy"
+                />
+                <FormControlLabel
+                    value={true}
+                    control={<Radio />}
+                    label="Softmax"
+                />
+            </RadioGroup>
+            <Typography gutterBottom>Epsilon</Typography>
+            <Slider
+                min={0}
+                max={1}
+                step={0.02}
+                ValueLabelComponent={ValueLabelComponent}
+                value={epsilon}
+                onChange={handleEpsilonChange}
+                className={classes.slider}
+                disabled={softmax}
             />
         </div>
     );
