@@ -110,6 +110,7 @@ export class Map {
             const action = agent.chooseAction();
             if (this.map[agent.x][agent.y] != undefined) {
                 agent.newRun();
+                continue;
             }
 
             let newX = agent.x;
