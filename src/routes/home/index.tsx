@@ -7,7 +7,8 @@ import { HeatMap } from "../../sarsa/heatmap";
 import {
     Activate,
     LearningRatePicker,
-    DiscountFactorPicker
+    DiscountFactorPicker,
+    StepsPicker
 } from "../../sarsa/control";
 
 const Home: FunctionalComponent = () => {
@@ -18,6 +19,7 @@ const Home: FunctionalComponent = () => {
             <Activate map={map} />
             <LearningRatePicker agent={agent} />
             <DiscountFactorPicker agent={agent} />
+            <StepsPicker agent={agent} />
             <Arena map={map} />
             <HeatMap map={map} agent={agent} />
         </div>

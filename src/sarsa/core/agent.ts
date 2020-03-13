@@ -7,12 +7,13 @@ export default class Agent {
     Q: number[][][];
     learningRate = 0.3;
     gamma = 0.8;
+    nSteps = 1;
     x: number;
     y: number;
-    lastX: number;
-    lastY: number;
-    lastReward?: number;
-    lastAction: number;
+    lastX: number[];
+    lastY: number[];
+    lastRewards: number[] = [];
+    lastActions: number[];
     policy: (Q: number[]) => number;
 
     constructor(
@@ -21,8 +22,10 @@ export default class Agent {
         policy: (Q: number[]) => number
     ) {
         this.policy = policy;
-        this.lastAction = BOTTOM;
-        this.x = this.y = this.lastX = this.lastY = 0;
+        this.lastActions = [BOTTOM];
+        this.x = this.y = 0;
+        this.lastX = [0];
+        this.lastY = [0];
 
         this.Q = [];
         for (let i = 0; i < width; i++) {
@@ -35,39 +38,62 @@ export default class Agent {
     }
 
     newRun() {
-        this.lastX = this.x = 0;
-        this.lastY = this.y = 0;
-        this.lastReward = undefined;
-        this.lastAction = BOTTOM;
+        const a = this.lastActions.shift();
+        for (let n = this.nSteps; n > 0; n--) {
+            this.reinforce(n, a);
+        }
+
+        this.x = 0;
+        this.y = 0;
+        this.lastX = [0];
+        this.lastY = [0];
+        this.lastRewards = [];
+        this.lastActions = [BOTTOM];
     }
 
     chooseAction() {
         const a = this.policy(this.Q[this.x][this.y]);
-        if (this.lastReward != undefined) {
-            const deltaQ =
-                this.lastReward +
-                this.gamma * this.Q[this.x][this.y][a] -
-                this.Q[this.lastX][this.lastY][this.lastAction];
-            this.Q[this.lastX][this.lastY][this.lastAction] +=
-                this.learningRate * deltaQ;
-        }
-        this.lastAction = a;
+        this.reinforce(this.nSteps, a);
+        this.lastActions.unshift(a);
         return a;
     }
 
+    reinforce(n: number, a: number) {
+        if (this.lastRewards.length < n) {
+            return;
+        }
+        let deltaQ = -this.Q[this.lastX[n - 1]][this.lastY[n - 1]][
+            this.lastActions[n - 1]
+        ];
+        let discount = 1;
+        for (let i = n - 1; i >= 0; i--) {
+            deltaQ += this.lastRewards[i] * discount;
+            discount *= this.gamma;
+        }
+        deltaQ += discount * this.Q[this.x][this.y][a];
+        this.Q[this.lastX[n - 1]][this.lastY[n - 1]][this.lastActions[n - 1]] +=
+            this.learningRate * deltaQ;
+
+        // Free memory
+        this.lastActions.pop();
+        this.lastRewards.pop();
+        this.lastX.pop();
+        this.lastY.pop();
+    }
+
     getReward(r: number) {
-        this.lastReward = r;
+        this.lastRewards.unshift(r);
     }
 
     newPosition(x: number, y: number) {
-        this.lastX = this.x;
-        this.lastY = this.y;
+        this.lastX.unshift(this.x);
+        this.lastY.unshift(this.y);
         this.x = x;
         this.y = y;
     }
 
     getSprite(t: number) {
-        switch (this.lastAction) {
+        switch (this.lastActions[0]) {
             case UP:
                 switch (t % 4) {
                     case 0:
@@ -121,13 +147,13 @@ export default class Agent {
     }
 
     draw(ctx: CanvasRenderingContext2D, t: number) {
-        const dx = ((this.x - this.lastX) * ((t % 4) + 1)) / 4;
-        const dy = ((this.y - this.lastY) * ((t % 4) + 1)) / 4;
+        const dx = ((this.x - this.lastX[0]) * ((t % 4) + 1)) / 4;
+        const dy = ((this.y - this.lastY[0]) * ((t % 4) + 1)) / 4;
 
         ctx.drawImage(
             this.getSprite(t),
-            blockSize * (this.lastX + dx),
-            blockSize * (this.lastY + dy) - blockSize / 2
+            blockSize * (this.lastX[0] + dx),
+            blockSize * (this.lastY[0] + dy) - blockSize / 2
         );
     }
 }

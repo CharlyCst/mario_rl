@@ -86,12 +86,38 @@ export const LearningRatePicker = (props: { agent: Agent }) => {
     );
 };
 
+export const StepsPicker = (props: { agent: Agent }) => {
+    const [steps, setSteps] = useState(props.agent.nSteps);
+    const classes = useStyles();
+
+    const handleChange = (event: any, newValue: number) => {
+        props.agent.nSteps = newValue;
+        setSteps(newValue);
+    };
+
+    return (
+        <div>
+            <Typography gutterBottom>Number of steps</Typography>
+            <Slider
+                min={1}
+                max={4}
+                step={1}
+                marks
+                ValueLabelComponent={ValueLabelComponent}
+                value={steps}
+                onChange={handleChange}
+                className={classes.slider}
+            />
+        </div>
+    );
+};
+
 export const Activate = (props: { map: Map }) => {
     const [run, setRun] = useState(false);
 
     return (
         <FormControlLabel
-            label="Run"
+            label={run ? "On" : "Off"}
             control={
                 <Switch
                     checked={run}
