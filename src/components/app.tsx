@@ -36,9 +36,8 @@ const App: preact.FunctionalComponent = () => {
         >
             <ThemeProvider theme={theme}>
                 <Router onChange={handleRoute}>
-                    <Route path="/" component={Home} />
-                    <Route path="/profile/" component={Profile} user="me" />
-                    <Route path="/profile/:user" component={Profile} />
+                    <Route path="/mario_rl" component={Home} />
+                    <Route default component={Home} />
                 </Router>
             </ThemeProvider>
         </div>
