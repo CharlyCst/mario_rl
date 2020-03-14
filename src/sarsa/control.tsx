@@ -8,7 +8,9 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Typography from "@material-ui/core/Typography";
-import { Map } from "./core/sarsa";
+import IconButton from "@material-ui/core/IconButton";
+import CachedIcon from "@material-ui/icons/Cached";
+import { Map } from "./core/map";
 import Agent from "./core/agent";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -195,20 +197,28 @@ export const Policy = (props: { agent: Agent }) => {
 };
 
 export const Activate = (props: { map: Map }) => {
-    const [run, setRun] = useState(false);
+    const [run, setRun] = useState(props.map.run);
 
     return (
-        <FormControlLabel
-            label={run ? "On" : "Off"}
-            control={
-                <Switch
-                    checked={run}
-                    onChange={() => {
-                        props.map.run = !run;
-                        setRun(!run);
-                    }}
-                />
-            }
-        />
+        <div>
+            <FormControlLabel
+                label={run ? "On" : "Off"}
+                control={
+                    <Switch
+                        checked={run}
+                        onChange={() => {
+                            props.map.run = !run;
+                            setRun(!run);
+                        }}
+                    />
+                }
+            />
+            <IconButton
+                aria-label="restart"
+                onClick={() => props.map.restart()}
+            >
+                <CachedIcon fontSize="small" />
+            </IconButton>
+        </div>
     );
 };

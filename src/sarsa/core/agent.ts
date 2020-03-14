@@ -25,7 +25,10 @@ export default class Agent {
         this.x = this.y = 0;
         this.lastX = [0];
         this.lastY = [0];
+        this.initQ(height, width);
+    }
 
+    initQ(height: number, width: number) {
         this.Q = [];
         for (let i = 0; i < width; i++) {
             const Qrow: number[][] = [];

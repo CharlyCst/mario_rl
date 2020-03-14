@@ -29,7 +29,7 @@ export const Arena = (props: { map: Map }) => {
             width={(2 + props.map.w) * blockSize}
             height={(3 + props.map.h) * blockSize}
             ref={canvas}
-            style="margin:2rem"
+            // style="margin:2rem"
         />
     );
 };

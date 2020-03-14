@@ -30,7 +30,10 @@ const App: FunctionalComponent = () => {
     };
 
     return (
-        <div id="app">
+        <div
+            id="app"
+            style="display: flex; justify-content: center; align-items: center;"
+        >
             <ThemeProvider theme={theme}>
                 <Router onChange={handleRoute}>
                     <Route path="/" component={Home} />

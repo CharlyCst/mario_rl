@@ -14,7 +14,7 @@ export class Map {
     t: number;
     turn: number;
 
-    run = false;
+    run = true;
     initialRendering = true;
 
     constructor(height: number, width: number) {
@@ -38,7 +38,14 @@ export class Map {
         this.map[x][y] = e;
     }
 
-    addReward(value: number, x: number, y: number) {}
+    restart() {
+        this.t = 0;
+        this.turn = 0;
+        for (const agent of this.agents) {
+            agent.initQ(this.h, this.w);
+            agent.newRun();
+        }
+    }
 
     draw(ctx: CanvasRenderingContext2D) {
         if (!this.run && !this.initialRendering) return;
