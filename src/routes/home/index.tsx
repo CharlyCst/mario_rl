@@ -1,4 +1,4 @@
-import { FunctionalComponent, h } from "preact";
+import * as preact from "preact";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { initSarsa } from "../../sarsa/core/map";
 import { Arena } from "../../sarsa/arena";
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const Home: FunctionalComponent = () => {
+const Home: preact.FunctionalComponent = () => {
     const classes = useStyles();
 
     const map = initSarsa();

@@ -1,8 +1,8 @@
-import { h } from "preact";
+import * as preact from "preact";
 import { useRef, useEffect } from "preact/hooks";
 import { blockSize, UP, BOTTOM, RIGHT, LEFT } from "./core/const";
 import { sleep } from "./core/utils";
-import { Map } from "./core/sarsa";
+import { Map } from "./core/map";
 import Agent from "./core/agent";
 
 const color1 = [255, 0, 255];

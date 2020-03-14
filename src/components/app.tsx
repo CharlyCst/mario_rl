@@ -1,4 +1,4 @@
-import { FunctionalComponent, h } from "preact";
+import * as preact from "preact";
 import { Route, Router, RouterOnChangeArgs } from "preact-router";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
@@ -23,7 +23,7 @@ const theme = createMuiTheme({
     }
 });
 
-const App: FunctionalComponent = () => {
+const App: preact.FunctionalComponent = () => {
     let currentUrl: string;
     const handleRoute = (e: RouterOnChangeArgs) => {
         currentUrl = e.url;

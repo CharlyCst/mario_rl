@@ -1,17 +1,23 @@
-import { h } from "preact";
+import * as preact from "preact";
 import { useState } from "preact/hooks";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import Slider from "@material-ui/core/Slider";
+import SliderTMP from "@material-ui/core/Slider";
 import Tooltip from "@material-ui/core/Tooltip";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
+import RadioTMP from "@material-ui/core/Radio";
+import RadioGroupTMP from "@material-ui/core/RadioGroup";
+import FormControlLabelTMP from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CachedIcon from "@material-ui/icons/Cached";
 import { Map } from "./core/map";
 import Agent from "./core/agent";
+
+// Todo: remove this, it is a Workaround for https://github.com/preactjs/preact-cli/issues/1030
+const Radio: any = RadioTMP as any;
+const RadioGroup: any = RadioGroupTMP as any;
+const FormControlLabel: any = FormControlLabelTMP as any;
+const Slider: any = SliderTMP as any;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,7 +36,8 @@ interface IToolTipProps {
     value: number;
 }
 
-function ValueLabelComponent(props: IToolTipProps) {
+// Todo: remove any, it is a Workaround for https://github.com/preactjs/preact-cli/issues/1030
+const ValueLabelComponent: any = (props: IToolTipProps) => {
     const { children, open, value } = props;
 
     return (
@@ -38,13 +45,16 @@ function ValueLabelComponent(props: IToolTipProps) {
             {children}
         </Tooltip>
     );
-}
+};
 
 export const DiscountFactorPicker = (props: { agent: Agent }) => {
     const [discountFactor, setdiscountFactor] = useState(props.agent.gamma);
     const classes = useStyles();
 
-    const handleChange = (event: any, newValue: number) => {
+    const handleChange = (event: any, newValue: number | number[]) => {
+        if (typeof newValue !== "number") {
+            newValue = newValue[0];
+        }
         props.agent.gamma = newValue;
         setdiscountFactor(newValue);
     };
@@ -69,7 +79,10 @@ export const LearningRatePicker = (props: { agent: Agent }) => {
     const [learningRate, setLearningRate] = useState(props.agent.learningRate);
     const classes = useStyles();
 
-    const handleChange = (event: any, newValue: number) => {
+    const handleChange = (event: any, newValue: number | number[]) => {
+        if (typeof newValue !== "number") {
+            newValue = newValue[0];
+        }
         props.agent.learningRate = newValue;
         setLearningRate(newValue);
     };
@@ -94,7 +107,10 @@ export const StepsPicker = (props: { agent: Agent }) => {
     const [steps, setSteps] = useState(props.agent.nSteps);
     const classes = useStyles();
 
-    const handleChange = (event: any, newValue: number) => {
+    const handleChange = (event: any, newValue: number | number[]) => {
+        if (typeof newValue !== "number") {
+            newValue = newValue[0];
+        }
         props.agent.nSteps = newValue;
         setSteps(newValue);
     };

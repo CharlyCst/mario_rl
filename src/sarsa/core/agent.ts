@@ -5,7 +5,7 @@ import { epsilonGreedy, greedy, softmax } from "./policies";
 const nbActions = 4;
 
 export default class Agent {
-    Q: number[][][];
+    Q: number[][][] = [[[]]];
     learningRate = 0.3;
     gamma = 0.8;
     epsilon = 0.2;
@@ -17,11 +17,12 @@ export default class Agent {
     lastX: number[];
     lastY: number[];
     lastRewards: number[] = [];
-    lastActions: number[];
+    lastActions: number[] = [];
     lastGreedyAction: number;
 
     constructor(height: number, width: number) {
         this.lastActions = [BOTTOM];
+        this.lastGreedyAction = BOTTOM;
         this.x = this.y = 0;
         this.lastX = [0];
         this.lastY = [0];
@@ -40,7 +41,7 @@ export default class Agent {
     }
 
     newRun() {
-        const a = this.lastActions.shift();
+        const a = this.lastActions?.shift() || BOTTOM;
         for (let n = this.nSteps; n > 0; n--) {
             this.reinforce(n, a);
         }
@@ -154,7 +155,7 @@ export default class Agent {
                 }
             default:
                 console.log(
-                    "Failed to get sprite for agent: " + this.lastAction
+                    "Failed to get sprite for agent: " + this.lastActions
                 );
                 return sprites.marioFace;
         }

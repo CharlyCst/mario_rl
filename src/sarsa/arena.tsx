@@ -1,6 +1,6 @@
-import { h } from "preact";
+import * as preact from "preact";
 import { useRef, useEffect } from "preact/hooks";
-import { Map } from "./core/sarsa";
+import { Map } from "./core/map";
 import { blockSize } from "./core/const";
 import { sleep } from "./core/utils";
 

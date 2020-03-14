@@ -1,13 +1,13 @@
 {
   "private": true,
-  "name": "sarsa",
-  "version": "0.0.0",
+  "name": "mario_rl",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "start": "per-env",
     "start:production": "npm run -s serve",
     "start:development": "npm run -s dev",
-    "build": "preact build",
+    "build": "preact build --dest docs --verbose --no-prerender",
     "serve": "preact build && sirv build --port 8080 --cors --single",
     "dev": "preact watch",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx}",
@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@types/jest": "^25.1.2",
+    "@types/react": "^16.9.23",
     "@types/webpack-env": "^1.15.1",
     "@typescript-eslint/eslint-plugin": "^2.19.0",
     "@typescript-eslint/parser": "^2.19.0",
@@ -57,7 +58,7 @@
     "sirv-cli": "^1.0.0-next.3",
     "ts-jest": "^25.2.0",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.7.5",
+    "typescript": "^3.8.3",
     "typings-for-css-modules-loader": "^1.7.0"
   }
 }
