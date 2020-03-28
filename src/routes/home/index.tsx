@@ -43,10 +43,10 @@ const Home: preact.FunctionalComponent = () => {
     const agent = new Agent(height, width);
     const map = initSarsa(height, width);
     map.addAgent(agent);
-    map.addElement(new Reward(), 2, 2);
+    map.addElement(new Reward(), 3, 2);
     map.addElement(new Reward(), 0, 4);
     map.addElement(new Monster(), 3, 3);
-    map.addElement(new Monster(), 3, 0);
+    map.addElement(new Monster(), 2, 0);
 
     return (
         <div className={classes.root}>
