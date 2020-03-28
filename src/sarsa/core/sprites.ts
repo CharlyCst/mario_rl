@@ -73,7 +73,6 @@ export const loaded = () => {
     for (let img in sprites) {
         res = res && sprites[img].complete;
     }
-    console.log(res);
     return res;
 };
 
