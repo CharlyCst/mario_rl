@@ -51,7 +51,6 @@ export class Map {
     draw(ctx: CanvasRenderingContext2D) {
         if (!this.run && !this.initialRendering) return;
         this.initialRendering = false;
-        // console.log("Render");
 
         ctx.drawImage(sprites.borderLeftUp, -blockSize, -blockSize);
         ctx.drawImage(sprites.borderRightUp, blockSize * this.w, -blockSize);

@@ -1,4 +1,4 @@
-const sprites = {
+const sprites: { [string]: HTMLImageElement } = {
     ground: new Image(),
     borderTop: new Image(),
     borderLeft: new Image(),
@@ -67,5 +67,13 @@ sprites.marioLeft2.src = "assets/mario_left2.png";
 sprites.block.src = "assets/block.png";
 sprites.redBlock.src = "assets/red_block.png";
 sprites.blockShadow.src = "assets/block_shadow.png";
+
+export const loaded = () => {
+    let res = true;
+    for (let img in sprites) {
+        res = res && sprites[img].complete;
+    }
+    return res;
+};
 
 export default sprites;

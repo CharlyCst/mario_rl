@@ -3,6 +3,7 @@ import { useRef, useEffect } from "preact/hooks";
 import { Map } from "./core/map";
 import { blockSize } from "./core/const";
 import { sleep } from "./core/utils";
+import { loaded } from "./core/sprites";
 
 export const Arena = (props: { map: Map }) => {
     const canvas = useRef<null | HTMLCanvasElement>(null);
@@ -14,6 +15,13 @@ export const Arena = (props: { map: Map }) => {
         if (ctx == null) return;
 
         ctx.translate(blockSize, blockSize);
+
+        let delay = 20;
+        while (!loaded()) {
+            sleep(delay);
+            delay = delay * 2;
+        }
+
         while (true) {
             props.map.draw(ctx);
             await sleep(props.map.refreshRate);
@@ -29,7 +37,6 @@ export const Arena = (props: { map: Map }) => {
             width={(2 + props.map.w) * blockSize}
             height={(3 + props.map.h) * blockSize}
             ref={canvas}
-            // style="margin:2rem"
         />
     );
 };
