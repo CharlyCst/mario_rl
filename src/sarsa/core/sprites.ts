@@ -1,4 +1,4 @@
-const sprites: { [string]: HTMLImageElement } = {
+const sprites = {
     ground: new Image(),
     borderTop: new Image(),
     borderLeft: new Image(),
@@ -73,6 +73,7 @@ export const loaded = () => {
     for (let img in sprites) {
         res = res && sprites[img].complete;
     }
+    console.log(res);
     return res;
 };
 

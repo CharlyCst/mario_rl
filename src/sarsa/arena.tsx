@@ -16,10 +16,10 @@ export const Arena = (props: { map: Map }) => {
 
         ctx.translate(blockSize, blockSize);
 
-        let delay = 20;
+        let delay = 10;
         while (!loaded()) {
-            sleep(delay);
-            delay = delay * 2;
+            await sleep(delay);
+            delay = delay * 1.4;
         }
 
         while (true) {
