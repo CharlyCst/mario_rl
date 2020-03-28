@@ -16,7 +16,7 @@ export const Arena = (props: { map: Map }) => {
         ctx.translate(blockSize, blockSize);
         while (true) {
             props.map.draw(ctx);
-            await sleep(200);
+            await sleep(props.map.refreshRate);
         }
     };
 

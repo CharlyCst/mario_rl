@@ -1,15 +1,17 @@
 import * as preact from "preact";
 import { useState } from "preact/hooks";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
 import SliderTMP from "@material-ui/core/Slider";
-import Tooltip from "@material-ui/core/Tooltip";
+import TooltipTMP from "@material-ui/core/Tooltip";
 import RadioTMP from "@material-ui/core/Radio";
 import RadioGroupTMP from "@material-ui/core/RadioGroup";
 import FormControlLabelTMP from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CachedIcon from "@material-ui/icons/Cached";
+import PlayArrow from "@material-ui/icons/PlayArrow";
+import Pause from "@material-ui/icons/Pause";
+import FastForward from "@material-ui/icons/FastForward";
 import { Map } from "./core/map";
 import Agent from "./core/agent";
 
@@ -18,6 +20,7 @@ const Radio: any = RadioTMP as any;
 const RadioGroup: any = RadioGroupTMP as any;
 const FormControlLabel: any = FormControlLabelTMP as any;
 const Slider: any = SliderTMP as any;
+const Tooltip: any = TooltipTMP as any;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -61,7 +64,7 @@ export const DiscountFactorPicker = (props: { agent: Agent }) => {
 
     return (
         <div>
-            <Typography gutterBottom>Discount Factor</Typography>
+            <Typography gutterBottom>Discount factor</Typography>
             <Slider
                 min={0}
                 max={1}
@@ -166,6 +169,7 @@ export const LearningStrategy = (props: { agent: Agent }) => {
 export const Policy = (props: { agent: Agent }) => {
     const [softmax, setSoftmax] = useState(props.agent.softmax);
     const [epsilon, setEpsilon] = useState(props.agent.epsilon);
+    const [beta, setBeta] = useState(props.agent.beta);
     const classes = useStyles();
 
     const handleChange = () => {
@@ -176,6 +180,11 @@ export const Policy = (props: { agent: Agent }) => {
     const handleEpsilonChange = (event: any, newValue: number) => {
         props.agent.epsilon = newValue;
         setEpsilon(newValue);
+    };
+
+    const handleBetaChange = (event: any, newValue: number) => {
+        props.agent.beta = newValue;
+        setBeta(newValue);
     };
 
     return (
@@ -197,44 +206,110 @@ export const Policy = (props: { agent: Agent }) => {
                     label="Softmax"
                 />
             </RadioGroup>
-            <Typography gutterBottom>Epsilon</Typography>
-            <Slider
-                min={0}
-                max={1}
-                step={0.02}
-                ValueLabelComponent={ValueLabelComponent}
-                value={epsilon}
-                onChange={handleEpsilonChange}
-                className={classes.slider}
-                disabled={softmax}
-            />
+            {softmax ? (
+                <div>
+                    <Typography gutterBottom>Beta</Typography>
+                    <Slider
+                        min={1}
+                        max={8}
+                        step={0.1}
+                        ValueLabelComponent={ValueLabelComponent}
+                        value={beta}
+                        onChange={handleBetaChange}
+                        className={classes.slider}
+                    />
+                </div>
+            ) : (
+                <div>
+                    <Typography gutterBottom>Epsilon</Typography>
+                    <Slider
+                        min={0}
+                        max={1}
+                        step={0.02}
+                        ValueLabelComponent={ValueLabelComponent}
+                        value={epsilon}
+                        onChange={handleEpsilonChange}
+                        className={classes.slider}
+                    />
+                </div>
+            )}
         </div>
     );
 };
 
 export const Activate = (props: { map: Map }) => {
     const [run, setRun] = useState(props.map.run);
+    const [refreshRate, setRefreshRate] = useState(props.map.refreshRate);
+
+    const playTooltip = run ? "Pause" : "Start";
+    let newRate = 200;
+    let speedup = "x20";
+    switch (refreshRate) {
+        case 25:
+            speedup = "x8";
+            break;
+        case 100:
+            speedup = "x2";
+            break;
+        case 200:
+            speedup = "x1";
+            break;
+        default:
+            break;
+    }
+
+    const updateRefreshRate = () => {
+        switch (refreshRate) {
+            case 25:
+                newRate = 10;
+                break;
+            case 100:
+                newRate = 25;
+                break;
+            case 200:
+                newRate = 100;
+                break;
+            default:
+                break;
+        }
+
+        props.map.refreshRate = newRate;
+        setRefreshRate(newRate);
+    };
 
     return (
         <div>
-            <FormControlLabel
-                label={run ? "On" : "Off"}
-                control={
-                    <Switch
-                        checked={run}
-                        onChange={() => {
-                            props.map.run = !run;
-                            setRun(!run);
-                        }}
-                    />
-                }
-            />
-            <IconButton
-                aria-label="restart"
-                onClick={() => props.map.restart()}
-            >
-                <CachedIcon fontSize="small" />
-            </IconButton>
+            <Tooltip title={playTooltip}>
+                <IconButton
+                    aria-label="Play"
+                    onClick={() => {
+                        props.map.run = !run;
+                        setRun(!run);
+                    }}
+                >
+                    {run ? (
+                        <Pause fontSize="small" />
+                    ) : (
+                        <PlayArrow fontSize="small" />
+                    )}
+                </IconButton>
+            </Tooltip>
+            <Tooltip title={speedup}>
+                <IconButton
+                    aria-label="Speed up"
+                    onClick={() => updateRefreshRate()}
+                >
+                    <FastForward fontSize="small" />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Reset">
+                <IconButton
+                    aria-label="Restart"
+                    onClick={() => props.map.restart()}
+                >
+                    <CachedIcon fontSize="small" />
+                </IconButton>
+            </Tooltip>
         </div>
     );
 };

@@ -16,7 +16,7 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            margin: theme.spacing(3),
+            margin: "1px",
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: 0
         },
         arena: {
+            margin: "auto",
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",
@@ -40,23 +41,31 @@ const Home: preact.FunctionalComponent = () => {
 
     const height = 6;
     const width = 4;
-    const agent = new Agent(height, width);
+    const agent = new Agent(height, width, 1, 0);
     const map = initSarsa(height, width);
+    const monster = new Monster();
     map.addAgent(agent);
-    map.addElement(new Reward(), 2, 2);
-    map.addElement(new Reward(), 0, 4);
-    map.addElement(new Monster(), 3, 3);
-    map.addElement(new Monster(), 3, 0);
+    map.addElement(monster, 0, 0);
+    map.addElement(monster, 0, 1);
+    map.addElement(monster, 0, 2);
+    map.addElement(monster, 0, 3);
+    map.addElement(monster, 0, 4);
+    map.addElement(monster, 0, 5);
+    map.addElement(new Reward(), 1, 3);
+
+    monster.reward = -1;
+    agent.gamma = 0.7;
+    agent.epsilon = 0.4;
 
     return (
         <div className={classes.root}>
             <div className={classes.box}>
-                <Activate map={map} />
-                <LearningRatePicker agent={agent} />
+                {/* <LearningRatePicker agent={agent} />
                 <DiscountFactorPicker agent={agent} />
-                <StepsPicker agent={agent} />
+                <StepsPicker agent={agent} /> */}
             </div>
             <div className={classes.box}>
+                <Activate map={map} />
                 <Policy agent={agent} />
                 <LearningStrategy agent={agent} />
             </div>

@@ -30,6 +30,7 @@ const sprites = {
     marioBack2: new Image(),
 
     block: new Image(),
+    redBlock: new Image(),
     blockShadow: new Image()
 };
 
@@ -64,6 +65,7 @@ sprites.marioLeft1.src = "assets/mario_left1.png";
 sprites.marioLeft2.src = "assets/mario_left2.png";
 
 sprites.block.src = "assets/block.png";
+sprites.redBlock.src = "assets/red_block.png";
 sprites.blockShadow.src = "assets/block_shadow.png";
 
 export default sprites;

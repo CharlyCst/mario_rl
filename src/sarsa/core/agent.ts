@@ -9,6 +9,7 @@ export default class Agent {
     learningRate = 0.3;
     gamma = 0.8;
     epsilon = 0.2;
+    beta = 3;
     softmax = false;
     QLearning = false;
     nSteps = 1;
@@ -19,13 +20,23 @@ export default class Agent {
     lastRewards: number[] = [];
     lastActions: number[] = [];
     lastGreedyAction: number;
+    initialPositionX = 0;
+    initialPositionY = 0;
 
-    constructor(height: number, width: number) {
+    constructor(
+        height: number,
+        width: number,
+        initialX?: number,
+        initialY?: number
+    ) {
         this.lastActions = [BOTTOM];
         this.lastGreedyAction = BOTTOM;
-        this.x = this.y = 0;
-        this.lastX = [0];
-        this.lastY = [0];
+        this.initialPositionX = initialX || 0;
+        this.initialPositionY = initialY || 0;
+        this.x = this.initialPositionX;
+        this.y = this.initialPositionY;
+        this.lastX = [this.initialPositionX];
+        this.lastY = [this.initialPositionY];
         this.initQ(height, width);
     }
 
@@ -46,10 +57,10 @@ export default class Agent {
             this.reinforce(n, a);
         }
 
-        this.x = 0;
-        this.y = 0;
-        this.lastX = [0];
-        this.lastY = [0];
+        this.x = this.initialPositionX;
+        this.y = this.initialPositionY;
+        this.lastX = [this.initialPositionX];
+        this.lastY = [this.initialPositionY];
         this.lastRewards = [];
         this.lastActions = [BOTTOM];
     }
@@ -58,7 +69,7 @@ export default class Agent {
         const Q = this.Q[this.x][this.y];
         let a: number;
         if (this.softmax) {
-            a = softmax(Q);
+            a = softmax(this.beta, Q);
         } else a = epsilonGreedy(this.epsilon, Q);
         this.lastGreedyAction = greedy(Q);
 

@@ -1,6 +1,6 @@
 import * as preact from "preact";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { initSarsa, Monster, Reward } from "../../sarsa/core/map";
+import { initSarsa, Monster, Reward, SmallReward } from "../../sarsa/core/map";
 import Agent from "../../sarsa/core/agent";
 import { Arena } from "../../sarsa/arena";
 import { HeatMap } from "../../sarsa/heatmap";
@@ -44,21 +44,18 @@ const Home: preact.FunctionalComponent = () => {
     const map = initSarsa(height, width);
     map.addAgent(agent);
     map.addElement(new Reward(), 2, 2);
-    map.addElement(new Reward(), 0, 4);
-    map.addElement(new Monster(), 3, 3);
-    map.addElement(new Monster(), 3, 0);
+    map.addElement(new Reward(), 1, 4);
+    map.addElement(new Monster(), 3, 4);
+    map.addElement(new Monster(), 1, 0);
+
+    agent.epsilon = 0;
+    agent.learningRate = 0.3;
+    agent.gamma = 0.7;
 
     return (
         <div className={classes.root}>
             <div className={classes.box}>
                 <Activate map={map} />
-                <LearningRatePicker agent={agent} />
-                <DiscountFactorPicker agent={agent} />
-                <StepsPicker agent={agent} />
-            </div>
-            <div className={classes.box}>
-                <Policy agent={agent} />
-                <LearningStrategy agent={agent} />
             </div>
             <div className={classes.arena}>
                 <Arena map={map} />

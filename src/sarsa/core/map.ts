@@ -3,8 +3,8 @@ import Agent from "./agent";
 import { epsilonGreedy } from "./policies";
 import { RIGHT, LEFT, UP, BOTTOM, blockSize } from "./const";
 
-const height = 6;
-const width = 4;
+// const height = 6;
+// const width = 4;
 
 export class Map {
     map: (Element | undefined)[][];
@@ -14,8 +14,9 @@ export class Map {
     t: number;
     turn: number;
 
-    run = true;
+    run = false;
     initialRendering = true;
+    refreshRate = 200; // in ms
 
     constructor(height: number, width: number) {
         this.turn = 0;
@@ -161,7 +162,7 @@ abstract class Element {
     draw(ctx: CanvasRenderingContext2D, x: number, y: number, t: number) {}
 }
 
-class Reward extends Element {
+export class Reward extends Element {
     collision = false;
     reward = 1;
     reset = true;
@@ -172,7 +173,18 @@ class Reward extends Element {
     }
 }
 
-class Monster extends Element {
+export class SmallReward extends Element {
+    collision = false;
+    reward = 0.5;
+    reset = true;
+
+    draw(ctx: CanvasRenderingContext2D, x: number, y: number, t: number) {
+        ctx.drawImage(sprites.redBlock, blockSize * x, blockSize * (y - 1.6));
+        ctx.drawImage(sprites.blockShadow, blockSize * x, blockSize * y);
+    }
+}
+
+export class Monster extends Element {
     collision = false;
     reward = -1;
     reset = true;
@@ -196,14 +208,7 @@ class Monster extends Element {
 }
 
 // Initialize the map and Q values
-export function initSarsa() {
-    const map = new Map(height, width);
-
-    map.addAgent(new Agent(height, width));
-    map.addElement(new Reward(), 2, 2);
-    map.addElement(new Reward(), 0, 4);
-    map.addElement(new Monster(), 3, 3);
-    map.addElement(new Monster(), 3, 0);
-
+export function initSarsa(h: number, w: number) {
+    const map = new Map(h, w);
     return map;
 }

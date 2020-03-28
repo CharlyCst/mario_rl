@@ -1,5 +1,3 @@
-const softmaxFactor = 2;
-
 export const greedy = (Q: number[]) => {
     let max = -Infinity;
     let maxIdx: number[] = [];
@@ -23,16 +21,16 @@ export const epsilonGreedy = (epsilon: number, Q: number[]) => {
     return greedy(Q);
 };
 
-export const softmax = (Q: number[]) => {
+export const softmax = (beta: number, Q: number[]) => {
     let total = 0;
     for (let i = 0; i < 4; i++) {
-        total += Math.exp(softmaxFactor * Q[i]);
+        total += Math.exp(beta * Q[i]);
     }
 
     const r = Math.random();
     let cumsum = 0;
     for (let i = 0; i < 4; i++) {
-        cumsum += Math.exp(softmaxFactor * Q[i]) / total;
+        cumsum += Math.exp(beta * Q[i]) / total;
         if (cumsum >= r) {
             return i;
         }

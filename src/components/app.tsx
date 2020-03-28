@@ -3,8 +3,12 @@ import { Route, Router, RouterOnChangeArgs } from "preact-router";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import Home from "../routes/home";
-import Profile from "../routes/profile";
-import Header from "./header";
+import Cliff from "../routes/cliff";
+import Multi from "../routes/multi";
+import Parameters from "../routes/parameters";
+import Policies from "../routes/policies";
+import Small from "../routes/small";
+Policies;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 if ((module as any).hot) {
@@ -37,6 +41,16 @@ const App: preact.FunctionalComponent = () => {
             <ThemeProvider theme={theme}>
                 <Router onChange={handleRoute}>
                     <Route path="/mario_rl" component={Home} />
+                    <Route path="/mario_rl/cliff" component={Cliff} />
+                    <Route path="cliff" component={Cliff} />
+                    <Route path="/mario_rl/multi" component={Multi} />
+                    <Route path="multi" component={Multi} />
+                    <Route path="/mario_rl/parameters" component={Parameters} />
+                    <Route path="parameters" component={Parameters} />
+                    <Route path="/mario_rl/policies" component={Policies} />
+                    <Route path="policies" component={Policies} />
+                    <Route path="/mario_rl/small" component={Small} />
+                    <Route path="small" component={Small} />
                     <Route default component={Home} />
                 </Router>
             </ThemeProvider>
