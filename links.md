@@ -10,4 +10,20 @@ You can find the original web pages for each section with the corresponding link
 
 ## Exploration vs Exploitation dilemma
 
-[link](https://charlycst.github.io/mario_rl/small)
+[link](https://charlycst.github.io/mario_rl/policies)
+
+## A few words on parameters
+
+[link](https://charlycst.github.io/mario_rl/parameters")
+
+## Multi-steps Sarsa
+
+[link](https://charlycst.github.io/mario_rl/multi)
+
+## Q-Learning
+
+[link](https://charlycst.github.io/mario_rl/cliff)
+
+## Conclusion
+
+[link](https://charlycst.github.io/mario_rl)
