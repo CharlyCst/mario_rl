@@ -1,6 +1,6 @@
 import * as preact from "preact";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { initSarsa, Monster, Reward } from "../../sarsa/core/map";
+import { initSarsa, Monster, Reward, SmallReward } from "../../sarsa/core/map";
 import Agent from "../../sarsa/core/agent";
 import { Arena } from "../../sarsa/arena";
 import { HeatMap } from "../../sarsa/heatmap";
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: 0
         },
         arena: {
+            margin: "auto",
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",

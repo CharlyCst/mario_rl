@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: 0
         },
         arena: {
+            margin: "auto",
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",
